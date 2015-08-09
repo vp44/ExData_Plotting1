@@ -1,11 +1,8 @@
-## Getting full dataset
-data_full <- read.csv("household_power_consumption.txt", header=T, sep=';', na.strings="?", 
-                      nrows=2075259, check.names=F, stringsAsFactors=F, comment.char="", quote='\"')
-data_full$Date <- as.Date(data_full$Date, format="%d/%m/%Y")
-
-## Subsetting the data
-data <- subset(data_full, subset=(Date >= "2007-02-01" & Date <= "2007-02-02"))
-rm(data_full)
+## Load Data
+LoadData <- read.csv("household_power_consumption.txt", sep=';', na.strings="?", check.names=F, stringsAsFactors=F, comment.char="", quote='\"')
+LoadData$Date <- as.Date(LoadData$Date, format="%d/%m/%Y")
+data <- LoadData[LoadData$Date %in% as.Date(c("2007-02-01" , "2007-02-02")),]
+rm(LoadData)
 
 ## Converting dates
 datetime <- paste(as.Date(data$Date), data$Time)
@@ -19,7 +16,7 @@ with(data, {
   lines(Sub_metering_3~Datetime,col='Blue')
 })
 legend("topright", col=c("black", "red", "blue"), lty=1, lwd=2, 
-       legend=c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
+       legend=c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"),cex=0.5)
 
 ## Saving to file
 dev.copy(png, file="plot3.png", height=480, width=480)
